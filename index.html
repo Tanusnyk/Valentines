@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<title>Valentine Surprise 💖</title>
+
+<style>
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(135deg,#ff758c,#ff7eb3);
+  font-family:"Mangal","Nirmala UI",sans-serif;
+  overflow:hidden;
+}
+
+/* 💕 Floating hearts */
+.heart{
+  position:fixed;
+  bottom:-30px;
+  font-size:22px;
+  animation:floatUp 6s linear infinite;
+  opacity:0.8;
+}
+@keyframes floatUp{
+  0%{transform:translateY(0) scale(0.8);opacity:1;}
+  100%{transform:translateY(-110vh) scale(1.2);opacity:0;}
+}
+
+/* ✨ Sparkles */
+.sparkle{
+  position:fixed;
+  font-size:14px;
+  animation:spark 2s ease-out forwards;
+}
+@keyframes spark{
+  0%{opacity:1; transform:scale(0.5);}
+  100%{opacity:0; transform:scale(1.5);}
+}
+
+/* ===== CARD ===== */
+.container{
+  background:white;
+  width:360px;
+  padding:30px;
+  border-radius:25px;
+  text-align:center;
+  position:relative;
+  box-shadow:0 15px 35px rgba(0,0,0,0.25);
+  z-index:2;
+}
+
+h1{ color:#ff4d6d; font-size:26px; }
+
+img{
+  width:200px;
+  margin:15px 0;
+  border-radius:15px;
+}
+
+#message{
+  min-height:50px;
+  font-size:20px;
+  font-weight:bold;
+  color:#ff4d6d;
+}
+
+/* Buttons */
+button{
+  padding:14px 28px;
+  font-size:18px;
+  border:none;
+  border-radius:30px;
+  cursor:pointer;
+  margin:10px;
+}
+#yes{ background:#ff4d6d; color:white; }
+#no{ background:#ddd; position:absolute; }
+#surpriseBtn{ display:none; background:#ff4d6d; color:white; }
+
+/* ===== SUNFLOWER SCREEN ===== */
+#sunflowerScreen{
+  display:none;
+  background:white;
+  width:360px;
+  padding:30px;
+  border-radius:25px;
+  text-align:center;
+  box-shadow:0 15px 35px rgba(0,0,0,0.25);
+}
+
+#orbitSystem{
+  position:relative;
+  width:220px;
+  height:220px;
+  margin:10px auto;
+}
+
+#flowerCenter{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+}
+
+#flowerImg{ width:90px; }
+
+#sun{
+  position:absolute;
+  font-size:32px;
+}
+
+#poem{
+  margin-top:18px;
+  font-size:18px;
+  font-weight:bold;
+  color:#ff4d6d;
+}
+</style>
+</head>
+
+<body>
+
+<!-- 🔊 MUSIC -->
+<audio id="bgMusic" loop>
+  <source src="./music.mp3" type="audio/mpeg">
+</audio>
+
+<!-- 💖 MAIN CARD -->
+<div class="container" id="mainCard">
+  <h1 id="title">ए जान, का तू हमार वैलेंटाइन बनबू?? 💖</h1>
+
+  <!-- GIF BOX -->
+  <div id="gifBox">
+    <img src="./rose.gif">
+  </div>
+
+  <div id="message"></div>
+
+  <button id="yes" onclick="yesClick()">Yes 😍</button>
+  <button id="no" onclick="noClick()">No 😐</button>
+  <button id="surpriseBtn" onclick="showSurprise()">🎁 Surprise</button>
+</div>
+
+<!-- 🌻 SUNFLOWER SCREEN -->
+<div id="sunflowerScreen" class="container">
+  <h1>हम तोहसे बहुत प्यार करतानी ❤️</h1>
+
+  <div id="orbitSystem">
+    <div id="flowerCenter">
+      <img id="flowerImg" src="./sunflower.gif">
+      <div><b>&lt; tanu &gt;</b></div>
+    </div>
+    <div id="sun">🌞</div>
+  </div>
+
+  <div><b>&lt; SURAJ &gt;</b></div>
+
+  <div id="poem">
+    जइसे सूरज अपन राहे घूमेला,<br>
+    ओइसे हमार प्यार तहरे ओर घूमेला…<br>
+    आ हम त आज ना, हर जनम,<br>
+    हमेशा तहरे साथे रहबानी 💖
+  </div>
+</div>
+
+<script>
+/* 🔥 Force GIF reload */
+function setGif(src){
+  const box = document.getElementById("gifBox");
+  box.innerHTML = "";
+  const img = document.createElement("img");
+  img.src = src;
+  box.appendChild(img);
+}
+
+/* 💕 Hearts */
+setInterval(()=>{
+  const h=document.createElement("div");
+  h.className="heart";
+  h.innerHTML="💖";
+  h.style.left=Math.random()*100+"vw";
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),7000);
+},500);
+
+/* ✨ Sparkles */
+document.addEventListener("click",e=>{
+  const s=document.createElement("div");
+  s.className="sparkle";
+  s.innerHTML="✨";
+  s.style.left=e.clientX+"px";
+  s.style.top=e.clientY+"px";
+  document.body.appendChild(s);
+  setTimeout(()=>s.remove(),2000);
+});
+
+/* 🎵 START MUSIC ON FIRST USER INTERACTION */
+let musicStarted = false;
+document.addEventListener("click", ()=>{
+  if(!musicStarted){
+    const music = document.getElementById("bgMusic");
+    music.volume = 0.4;
+    music.play().catch(()=>{});
+    musicStarted = true;
+  }
+}, { once:true });
+
+let noClickCount=0;
+
+const taunts=[
+  "इतना भाव ठीक नइखे 😏",
+  "अरे बाबू, इतना नखरा काहे? 😒",
+  "अब त मान जाईं ना 😜"
+];
+
+const tauntGifs=[
+  "./taunt1.gif",
+  "./taunt2.gif",
+  "./taunt3.gif"
+];
+
+function noClick(){
+  noClickCount++;
+
+  if(noClickCount<=3){
+    setGif(tauntGifs[noClickCount-1]);
+    message.textContent=taunts[noClickCount-1];
+  }
+
+  if(noClickCount===3){
+    message.textContent+=" 😈 (अब ध्यान से देख…)";
+    document.addEventListener("mousemove", enableNoRun, { once:true });
+  }
+}
+
+function enableNoRun(){
+  no.addEventListener("mouseover", moveNo);
+}
+
+function moveNo(){
+  setGif("./giggle.gif");
+  const box=document.querySelector(".container");
+  no.style.left=Math.random()*(box.clientWidth-no.clientWidth)+"px";
+  no.style.top=Math.random()*(box.clientHeight-no.clientHeight)+"px";
+}
+
+function yesClick(){
+  title.textContent="अब तू पूरा फँस गइनी… अब तू हमार हमेशा के वैलेंटाइन हउ 💞";
+  setGif("./hug.gif");
+  message.textContent="हम तोहसे बहुत प्यार करतानी ❤️";
+
+  yes.style.display="none";
+  no.style.display="none";
+  surpriseBtn.style.display="inline-block";
+}
+
+/* 🌻 SUNFLOWER */
+let angle=0;
+const radius=90;
+const center=110;
+
+function showSurprise(){
+  mainCard.style.display="none";
+  sunflowerScreen.style.display="block";
+
+  setInterval(()=>{
+    angle+=0.03;
+    sun.style.left=center+radius*Math.cos(angle)+"px";
+    sun.style.top=center+radius*Math.sin(angle)+"px";
+    flowerImg.style.transform="rotate("+(angle*180/Math.PI+90)+"deg)";
+  },30);
+}
+</script>
+
+</body>
+</html>
